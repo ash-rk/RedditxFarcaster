@@ -16,12 +16,13 @@ def get_popular_subreddits(limit=50):
 
     # Sort the DataFrame by the 'Subscribers' column in descending order
     df_sorted = df.sort_values(by='Subscribers', ascending=False)
-
+    df_sorted = df_sorted.reset_index(drop=True) # Reset index
     # Print the sorted DataFrame
-    print(df_sorted)
+    print(f"Trending channels: \n{df_sorted}")
+    return df_sorted
 
 def main():
-    get_popular_subreddits(50)
+    get_popular_subreddits(10)
 
 if __name__ == "__main__":
     main()
