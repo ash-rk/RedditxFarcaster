@@ -9,5 +9,8 @@ load_dotenv('.secrets')
 dune_key = os.getenv('DUNE_KEY')
 
 dune = DuneClient(dune_key)
-query_result = dune.get_latest_result(3507935)
-print(query_result.result)
+query_result = dune.get_latest_result(3528724)
+
+# Store the output in a text file
+with open('query_result.txt', 'w') as file:
+    file.write(str(query_result.result))

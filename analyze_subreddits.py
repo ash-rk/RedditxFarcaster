@@ -27,15 +27,10 @@ def get_post_metrics(subreddit_name, time_filter='week', limit=10):
         total_awards += sum(award['count'] for award in post.all_awardings)
         posts_counted += 1
     
-    avg_comments = total_comments / posts_counted if posts_counted else 0
-    avg_score = total_score / posts_counted if posts_counted else 0
-    avg_upvote_ratio = total_upvote_ratio / posts_counted if posts_counted else 0
-    avg_awards = total_awards / posts_counted if posts_counted else 0
-    
-    return avg_comments, avg_score, avg_upvote_ratio, avg_awards, posts_counted
+    # No longer calculating averages, returning totals
+    return total_comments, total_score, total_upvote_ratio, total_awards, posts_counted
 
 def analyze_subreddits(subreddits=None, time_filter='week', limit=10):
-    # If no custom list provided and fetching top subreddits is possible
     if subreddits is None and can_fetch_popular:
         subreddits_df = get_popular_subreddits(limit)
         subreddits = subreddits_df['Subreddit'].tolist()
@@ -43,20 +38,19 @@ def analyze_subreddits(subreddits=None, time_filter='week', limit=10):
     analysis_results = []
     
     for subreddit_name in subreddits:
-        avg_comments, avg_score, avg_upvote_ratio, avg_awards, avg_posts = get_post_metrics(subreddit_name, time_filter, limit)
+        total_comments, total_score, total_upvote_ratio, total_awards, total_posts = get_post_metrics(subreddit_name, time_filter, limit)
         analysis_results.append({
             "Subreddit": subreddit_name,
-            "Average Comments": avg_comments,
-            "Average Score": avg_score,
-            "Average Upvote Ratio": avg_upvote_ratio,
-            "Average Awards": avg_awards,
-            "Posts Counted": avg_posts
+            "Total Comments": total_comments,
+            "Total Score": total_score,
+            "Total Upvote Ratio": total_upvote_ratio / total_posts if total_posts > 0 else 0,  # Averaging upvote ratio for meaningfulness
+            "Total Awards": total_awards,
+            "Posts Counted": total_posts
         })
         
     analysis_df = pd.DataFrame(analysis_results)
     print(f"\nSubreddit insights based on the top {limit} posts of the last {time_filter}:\n{analysis_df}")
 
 if __name__ == "__main__":
-    # To specify subreddits, do it here, otherwise leave it as None to auto fetch top subreddits
-    custom_subreddits = None  # Example: ['ai', 'MachineLearning', 'datascience']
+    custom_subreddits = None  # Or ['ai', 'MachineLearning', 'datascience'] for custom analysis
     analyze_subreddits(custom_subreddits, time_filter='week', limit=10)
