@@ -9,7 +9,7 @@ try:
 except ImportError:
     can_fetch_popular = False
 
-def get_post_metrics(subreddit_name, time_filter='week', limit=10):
+def get_post_metrics(subreddit_name, time_filter='week', limit=500):
     reddit = authenticate_reddit()
     subreddit = reddit.subreddit(subreddit_name)
     top_posts = subreddit.top(time_filter=time_filter, limit=limit)
@@ -30,7 +30,7 @@ def get_post_metrics(subreddit_name, time_filter='week', limit=10):
     # No longer calculating averages, returning totals
     return total_comments, total_score, total_upvote_ratio, total_awards, posts_counted
 
-def analyze_subreddits(subreddits=None, time_filter='week', limit=10):
+def analyze_subreddits(subreddits=None, time_filter='week', limit=500):
     if subreddits is None and can_fetch_popular:
         subreddits_df = get_popular_subreddits(limit)
         subreddits = subreddits_df['Subreddit'].tolist()
@@ -49,8 +49,11 @@ def analyze_subreddits(subreddits=None, time_filter='week', limit=10):
         })
         
     analysis_df = pd.DataFrame(analysis_results)
-    print(f"\nSubreddit insights based on the top {limit} posts of the last {time_filter}:\n{analysis_df}")
+    # Output the DataFrame to a CSV file
+    csv_filename = f"subreddit_insights_{time_filter}.csv"
+    analysis_df.to_csv(csv_filename, index=False)
+    print(f"Subreddit insights based on the top {limit} posts of the last {time_filter} have been saved to {csv_filename}")
 
 if __name__ == "__main__":
     custom_subreddits = None  # Or ['ai', 'MachineLearning', 'datascience'] for custom analysis
-    analyze_subreddits(custom_subreddits, time_filter='week', limit=10)
+    analyze_subreddits(custom_subreddits, time_filter='week', limit=500)
