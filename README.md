@@ -61,4 +61,4 @@ REDDIT_CLIENT_SECRET='your_client_secret'
 DUNE_API_KEY='your_dune_api_key'  # If applicable
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details
+This project is licensed under the MIT License
