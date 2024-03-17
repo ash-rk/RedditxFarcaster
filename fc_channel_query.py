@@ -15,6 +15,15 @@ query = QueryBase(
 
 dune = DuneClient(dune_key)
 
-results_csv = dune.run_query_csv(query)
-with open('query_results.csv', 'wb') as file:
-    file.write(results_csv.data.getvalue())
+# results_csv = dune.run_query_csv(query)
+# with open('query_results.csv', 'wb') as file:
+#     file.write(results_csv.data.getvalue())
+
+query2 = QueryBase(
+    name="All Farcaster User Channel Details",
+    query_id=3534411
+)
+
+user_channel_metrics = dune.run_query_csv(query2)
+with open('user_channel_metrics.csv', 'wb') as file:
+    file.write(user_channel_metrics.data.getvalue())
