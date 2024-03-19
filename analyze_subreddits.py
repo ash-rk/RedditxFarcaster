@@ -1,4 +1,3 @@
-# analyze_subreddits.py
 from reddit_auth import authenticate_reddit
 import pandas as pd
 
@@ -12,6 +11,9 @@ except ImportError:
 def get_post_metrics(subreddit_name, time_filter='week', limit=500):
     reddit = authenticate_reddit()
     subreddit = reddit.subreddit(subreddit_name)
+    # Retrieve the subreddit's subscriber count
+    subscriber_count = subreddit.subscribers
+    
     top_posts = subreddit.top(time_filter=time_filter, limit=limit)
     
     total_comments = 0
@@ -27,8 +29,8 @@ def get_post_metrics(subreddit_name, time_filter='week', limit=500):
         total_awards += sum(award['count'] for award in post.all_awardings)
         posts_counted += 1
     
-    # No longer calculating averages, returning totals
-    return total_comments, total_score, total_upvote_ratio, total_awards, posts_counted
+    # Include subscriber_count in the return statement
+    return total_comments, total_score, total_upvote_ratio, total_awards, posts_counted, subscriber_count
 
 def analyze_subreddits(subreddits=None, time_filter='week', limit=500):
     if subreddits is None and can_fetch_popular:
@@ -38,12 +40,13 @@ def analyze_subreddits(subreddits=None, time_filter='week', limit=500):
     analysis_results = []
     
     for subreddit_name in subreddits:
-        total_comments, total_score, total_upvote_ratio, total_awards, total_posts = get_post_metrics(subreddit_name, time_filter, limit)
+        total_comments, total_score, total_upvote_ratio, total_awards, total_posts, subscriber_count = get_post_metrics(subreddit_name, time_filter, limit)
         analysis_results.append({
             "Subreddit": subreddit_name,
+            "Subscribers": subscriber_count,  # Add subscriber count to results
             "Total Comments": total_comments,
             "Total Score": total_score,
-            "Total Upvote Ratio": total_upvote_ratio / total_posts if total_posts > 0 else 0,  # Averaging upvote ratio for meaningfulness
+            "Total Upvote Ratio": total_upvote_ratio / total_posts if total_posts > 0 else 0,
             "Total Awards": total_awards,
             "Posts Counted": total_posts
         })
@@ -55,5 +58,5 @@ def analyze_subreddits(subreddits=None, time_filter='week', limit=500):
     print(f"Subreddit insights based on the top {limit} posts of the last {time_filter} have been saved to {csv_filename}")
 
 if __name__ == "__main__":
-    custom_subreddits = None  # Or ['ai', 'MachineLearning', 'datascience'] for custom analysis
+    custom_subreddits = None  # Adjust this list for custom analysis
     analyze_subreddits(custom_subreddits, time_filter='week', limit=500)
