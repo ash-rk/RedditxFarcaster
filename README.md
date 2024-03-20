@@ -60,5 +60,33 @@ REDDIT_CLIENT_ID='your_client_id'
 REDDIT_CLIENT_SECRET='your_client_secret'
 DUNE_API_KEY='your_dune_api_key'  # If applicable
 
+### Steps to Run
+
+Follow these steps to execute the analysis:
+
+1. **Reddit Data Extraction**
+   - Navigate to the `Reddit` folder and run the script for extracting Reddit data.
+     ```sh
+     python3 analyze_subreddits.py
+     ```
+
+2. **Farcaster Data Extraction**
+   - Move to the `Farcaster` folder and execute the script to gather Farcaster channel and user metrics.
+     ```sh
+     python3 fc_channel_query.py
+     ```
+
+3. **Data Cleaning**
+   - Still within the `Farcaster` folder, run the following script to clean the gathered Farcaster data.
+     ```sh
+     python3 dune_result_analysis.py
+     ```
+
+4. **Analysis Notebook**
+   - Open the `Farcaster vs Reddit Analysis.ipynb` notebook located in the main directory and run all cells to perform the analysis.
+
+Note: The output files generated from steps 1 to 3 are stored in the `data_retrieved` folder for easy access.
+
+
 ## License
 This project is licensed under the MIT License

@@ -8,7 +8,7 @@ def extract_channel_name(html_link):
     return match.group(1) if match else html_link
 
 # Load the CSV data into a pandas DataFrame
-df = pd.read_csv('query_results.csv')
+df = pd.read_csv('../data_retrieved/query_results.csv')
 
 # Clean the 'channel' column by applying the function
 df['channel'] = df['channel'].apply(extract_channel_name)
@@ -17,7 +17,7 @@ df['channel'] = df['channel'].apply(extract_channel_name)
 df = df.drop_duplicates(subset=['channel'])
 
 # Save the cleaned DataFrame to a new CSV file
-cleaned_csv_filename = 'cleaned_query_results.csv'
+cleaned_csv_filename = '../data_retrieved/cleaned_query_results.csv'
 df.to_csv(cleaned_csv_filename, index=False)
 
 # Display the first few rows of the cleaned DataFrame to check it

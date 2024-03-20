@@ -1,3 +1,4 @@
+import os
 from reddit_auth import authenticate_reddit
 import pandas as pd
 
@@ -53,7 +54,10 @@ def analyze_subreddits(subreddits=None, time_filter='week', limit=500):
         
     analysis_df = pd.DataFrame(analysis_results)
     # Output the DataFrame to a CSV file
-    csv_filename = f"subreddit_insights_{time_filter}.csv"
+    folder_path = '../data_retrieved'
+    os.makedirs(folder_path, exist_ok=True)
+
+    csv_filename = f"../data_retrieved/subreddit_insights_{time_filter}.csv"
     analysis_df.to_csv(csv_filename, index=False)
     print(f"Subreddit insights based on the top {limit} posts of the last {time_filter} have been saved to {csv_filename}")
 
