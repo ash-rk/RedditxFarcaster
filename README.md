@@ -81,8 +81,13 @@ Follow these steps to execute the analysis:
      ```sh
      python3 dune_result_analysis.py
      ```
+3. **Farcaster Follower data**
+   - Still within the `Farcaster` folder, run the following script to clean the gathered Farcaster data.
+     ```sh
+     python3 scrape.py
+     ```
 
-4. **Analysis Notebook**
+5. **Analysis Notebook**
    - Open the `Farcaster vs Reddit Analysis.ipynb` notebook located in the main directory and run all cells to perform the analysis.
 
 Note: The output files generated from steps 1 to 3 are stored in the `data_retrieved` folder for easy access.
